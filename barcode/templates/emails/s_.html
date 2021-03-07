@@ -1,0 +1,59 @@
+{% extends 'base.html' %}{% load static %}
+{% block page-title %} - Módulo : {{ module_title }}{% endblock %}
+{% block extra-css %}<link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}">{% endblock %}
+{% block extra-js %}
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/modal.js' %}"></script>
+{% endblock %}
+{% block mod-destination %}<li class="active"><a href="{% url 'l_Email' %}">Cliente-Email</a></li>{% endblock %}
+{% block content %}
+{% block content-title %}<h3>{{ section_title }}</h3>{% endblock %}
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"></div>
+<p></p>
+{% if messages %}
+<ul>
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+<strong>{{ message }}</strong>
+</div>
+{% endfor %}
+</ul>
+{% endif %}
+<p></p>
+<a class="btn btn-sm btn-default" href="{% url 'c_Email' %}" title="Crear Nuevo"><img src="{% static 'css/icon/SignAddicon.png' %}" alt=""></a>
+<p></p>
+{% if object_list %}
+<table id="tabla" class="display compact" style="width:100%">
+<thead>
+    <tr>
+        <th> CÓDIGO </th>
+        <th> CLIENTE </th>
+        <th> EMAIL </th>
+        <th class="text-center"> ACCIONES </th>
+    </tr>
+</thead>
+<tbody>
+{% for email in object_list %}
+    <tr>
+        <td>{{ Email.id }}</td>
+        <td>{{ Email.email_cliente }}</td>
+        <td>{{ Email.email }}</td>
+        <td class="text-center">
+           <form method="POST" action="{% url 'e_Email' Email.id %}">
+            {% csrf_token %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-success" onclick="return abrir_modal('{% url 'd_Email' Email.id %}')" title="Detalle"><span class="glyphicon glyphicon-eye-open"></span></button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="return abrir_modal('{% url 'u_Email' Email.id %}')" title="Actualizar"><span class="glyphicon glyphicon-pencil"></span></button>
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return eliminar();" title="Eliminar"><span class="glyphicon glyphicon-trash"></span></button>
+            </div>
+            </form>
+        </td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+    <h4>No hay registros a mostrar</h4>
+{% endif %}
+{% endblock %}
