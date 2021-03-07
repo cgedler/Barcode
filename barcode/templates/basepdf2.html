@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/pdf.css' %}">
+<!-- Style -->
+<style>
+@page {
+    size: letter portrait;
+    @frame header_frame {
+        -pdf-frame-content: header_content;
+        left: 1cm;
+        width: 19cm;
+        top: 1cm;
+        height: 3cm;
+        padding: 5px 2px 0px 2px;
+        -pdf-frame-border: 1;
+    }
+    @frame col1_frame {
+            left: 1cm; width: 4.75cm; top: 4.5cm; height: 21cm;
+    }
+    @frame col2_frame {
+            left: 5.90cm; width: 4.75cm; top: 4.5cm; height: 21cm;
+    }
+    @frame col3_frame {
+            left: 10.80cm; width: 4.75cm; top: 4.5cm; height: 21cm;
+    }
+    @frame col4_frame {
+            left: 15.70cm; width: 4.75cm; top: 4.5cm; height: 21cm;
+    }
+    @frame footer_frame {
+        -pdf-frame-content: footer_content;
+        bottom: 1cm;
+        left: 1cm;
+        width: 19cm; 
+        height: 1cm;
+        right: 1cm;
+        -pdf-frame-border: 1;
+    }
+}
+.hrItem {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #fff; /* Modern Browsers */
+}
+</style>
+<!-- Extra Style -->
+{% block extra-style %}
+{% endblock %} 
+<title>Fletes GAG{% block page-title %}{% endblock %}</title>
+</head>
+<body>
+<div id="header_content">
+<table style="width:100%">
+<tr>
+    <th style="text-align:left;width:30%;font-weight:normal;">{{ empresa_nombre }} - Reporte</th>
+    <td style="text-align:left;width:50%;font-weight:normal;">{% block barcode %}<!-- <pdf:barcode value="BARCODE TEXT COMES HERE" type="code128" humanreadable="1"/> -->{% endblock %}</td>
+    <td style="text-align:rigth;width:20%;font-weight:normal;">{{ today | date:"D d M Y" }}</td>
+</tr>
+<tr>
+    <th style="text-align:left;width:30%;font-weight:normal;">{{ empresa_rif }}</th>
+    <td style="text-align:center;width:50%;font-weight:normal;"><h1>Reporte</h1></td>
+    <td style="text-align:rigth;width:20%;font-weight:normal;"></td>
+</tr>
+<tr>
+    <th style="text-align:left;width:30%;font-weight:normal;">{{ empresa_direstado }},{{ empresa_dirciudad }}</th>
+    <td style="text-align:center;width:50%;font-weight:normal;"><h1>{{ ruta }}</h1></td>
+    <td style="text-align:rigth;width:20%;font-weight:normal;"></td> 
+</tr>
+<tr>
+    <th style="text-align:left;width:30%;font-weight:normal;">{{ empresa_direccion }}</th>
+    <td style="text-align:center;width:50%;font-weight:normal;"><h1>Total de Guías : {{ total_guias }}</h1></td>
+    <td style="text-align:rigth;width:20%;font-weight:normal;"></td>
+</tr>
+<tr>
+    <th style="text-align:left;width:30%;font-weight:normal;">Zona Postal {{ empresa_postal }}</th>
+    <td style="text-align:center;width:50%;font-weight:normal;">{% block content-title %}<h1>{{ section_title }}</h1>{% endblock %}</td>
+    <td style="text-align:rigth;width:20%;font-weight:normal;"></td>
+</tr>
+</table>
+</div>
+{% block content %}Cuerpo{% endblock %}
+<div id="footer_content">
+<hr class="hrItem" />
+Reporte - página <pdf:pagenumber> de <pdf:pagecount>
+</div>
+</body>
+</html>

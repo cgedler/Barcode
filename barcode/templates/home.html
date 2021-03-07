@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page-title %}Home{% endblock %}
+{% block extra-js %}
+<script src="{% static 'js/Chart.min.js' %}"></script>
+<script type="text/javascript">
+var config1 = {
+    type: 'line',
+    data: {
+        datasets: [{
+            data: {{ data1|safe }},
+            //fill: false,
+            backgroundColor: ['#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf', '#ffcd56', '#aaff80'],
+            borderWidth: 1,
+            label: 'Bultos del Día x Sucursal'
+        }],
+        labels: {{ labels1|safe }}
+    },
+    //options: { responsive: true}
+    options:{scales:{xAxes:[{ticks:{beginAtZero:true}}]}}
+};
+var config2 = {
+    type: 'bar',
+    data: {
+        datasets: [{
+            data: {{ data2|safe }},
+            //fill: false,
+            backgroundColor: ['#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf', '#ffcd56', '#aaff80','#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40'],
+            borderWidth: 1,
+            label: 'Bultos del Día x Ruta'
+        }],
+        labels: {{ labels2|safe }}
+    },
+    //options: { responsive: true}
+    options:{scales:{xAxes:[{ticks:{beginAtZero:true}}]}}
+};
+var config3 = {
+    type: 'bar',
+    data: {
+        datasets: [{
+            data: {{ data3|safe }},
+            //fill: false,
+            backgroundColor: ['#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf', '#ffcd56', '#aaff80','#bf1e2e', '#fba729'],
+            borderWidth: 1,
+            label: 'Bultos x Mes'
+        }],
+        labels: {{ labels3|safe }}
+    },
+    //options: { responsive: true}
+    options:{scales:{xAxes:[{ticks:{beginAtZero:true}}]}}
+};
+var config4 = {
+    type: 'bar',
+    data: {
+        datasets: [{
+            data: {{ data4|safe }},
+            //fill: false,
+            backgroundColor: ['#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40'],
+            borderWidth: 1,
+            label: 'Bultos últimos 5 años'
+        }],
+        labels: {{ labels4|safe }}
+    },
+    //options: { responsive: true}
+    options:{scales:{xAxes:[{ticks:{beginAtZero:true}}]}}
+};
+
+window.onload = function() {
+    var ctx1 = document.getElementById('horizontalBar').getContext('2d');
+    window.myPie1 = new Chart(ctx1, config1);
+    var ctx2 = document.getElementById('lineChart2').getContext('2d');
+    window.myPie2 = new Chart(ctx2, config2);
+    var ctx3 = document.getElementById('lineChart3').getContext('2d');
+    window.myPie3 = new Chart(ctx3, config3);
+    var ctx4 = document.getElementById('lineChart4').getContext('2d');
+    window.myPie4 = new Chart(ctx4, config4);
+};
+
+</script>
+{% endblock %}
+{% block mod-home %}<li class="active"><a href="{% url 'home' %}"><span class="glyphicon glyphicon-dashboard"></span> DashBoard</a></li>{% endblock %}
+{% block content %}
+{% block content-title %}<h3>DashBoard</h3>{% endblock %}
+<div class="row">
+    <div class="col-xs-6 col-md-6">
+        <canvas id="horizontalBar"></canvas>
+    </div>
+    <div class="col-xs-6 col-md-6">
+        <canvas id="lineChart2"></canvas>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6 col-md-6">
+        <canvas id="lineChart3"></canvas>
+    </div>
+    <div class="col-xs-6 col-md-6">
+        <canvas id="lineChart4"></canvas>
+    </div>
+</div>
+<canvas id="lineChart"></canvas>
+<canvas id="radarChart"></canvas>
+<canvas id="barChart"></canvas>
+<canvas id="horizontalBar"></canvas>
+<canvas id="polarChart"></canvas>
+<canvas id="doughnutChart"></canvas>
+<canvas id="bubbleChart"></canvas>
+<canvas id="scatterChart"></canvas>
+<canvas id="labelChart"></canvas>
+{% endblock %}
