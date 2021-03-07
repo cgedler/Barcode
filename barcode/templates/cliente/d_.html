@@ -1,0 +1,37 @@
+{% load static %}
+<div class="modal-dialog">
+<!-- Modal content-->
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Detalle</h4>
+</div>
+<div class="modal-body">
+<label for="id_cliente"><strong>ID del Cliente : </strong></label>
+{{object.id_cliente}}
+<p></p>
+<label for="tipo_persona"><strong>Tipo de persona: </strong></label>
+{{object.tipo_persona}} 
+<p></p>
+<label for="nombre"><strong>Nombre : </strong></label>
+{{object.nombre}} 
+<p></p>
+<label for="celular"><strong>Celular : </strong></label>
+{{object.celular}} 
+<p></p>
+<label for="telefono"><strong>Teléfono : </strong></label>
+{{object.telefono}} 
+<p></p>
+<label for="email"><strong>Email : </strong></label>
+{{object.email}}
+<p></p>
+<label for="origen"><strong>Sucursal : </strong></label>
+{{object.origen}}
+<p></p>
+</div>
+<div class="modal-footer">
+<a class="btn btn-sm btn-default" href="{% url 'pu_Cliente' object.id_cliente %}" title="Imprimir PDF"><img src="{% static 'css/icon/AdobePDFDocumenticon16.png' %}" alt=""></a>
+<button type="button" class="btn btn-default" data-dismiss="modal" title="Salir"><span class="glyphicon glyphicon-remove"></span></button>
+</div>
+</div>
+</div>
