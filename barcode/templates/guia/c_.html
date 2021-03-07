@@ -1,0 +1,310 @@
+{% extends 'base.html' %}{% load static %}
+{% block extra-js %}
+<script src="{% static 'js/jquery.cookie.js' %}"></script>
+<script type="application/javascript">
+$(document).ready(function () {
+$('#remitente').empty();
+$('#destinatario').empty();
+var data_destino = '{{ data_destino|safe }}';
+data_destinox = $.parseJSON(data_destino);
+$('#id_ruta').change(function(data_destinox){
+    data_destinox = $.parseJSON(data_destino);
+    var newarr;
+    var selec = this.value;
+    $.each(data_destinox, function (i,v)
+    {
+        newarr = $(data_destinox).filter(function( i ) {
+            return data_destinox[i].fields.rutas === selec;
+        }); 
+    });
+    $('#id_destino').empty();
+    $.each(newarr, function (i,v) {
+        $('#id_destino').append($('<option></option>').val(newarr[i].pk).html(newarr[i].pk + ' - ' + newarr[i].fields.nombre));
+    });
+    //console.log(this.value);
+});
+// -- Ajax --
+var csrftoken = $.cookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+$('#btn_s_remitente').on('click', function(event){
+    event.preventDefault();
+    if($("#s_remitente").val().length == 0){
+        alert('ALERTA!!! El ID del Remitente no puede estar en Blanco');
+    }else{
+        var arr = {"query_a": $("#persona_remitente").val(), "query_b": $("#s_remitente").val()};
+        var valParam = JSON.stringify(arr);
+        $.ajax({
+            url: '{% url 'c_Guia' %}',
+            type: 'POST',
+            data: { ArrJson: valParam },
+            DataType: 'json',
+        }).done(function(data) {
+            if(data.length == 0){
+                alert('ALERTA!!! No se encuentra el Remitente');
+                return;
+            }
+            else{
+                data_cli = $.parseJSON(data);
+                var arr_cli;
+                var selec_cli = "barcode.cliente";
+                var arr_email;
+                var selec_email = "barcode.email";
+                $.each(data_cli, function (i,v)
+                {
+                    arr_cli = $(data_cli).filter(function( i ) {
+                        return data_cli[i].model === selec_cli;
+                    });
+                    arr_email = $(data_cli).filter(function( i ) {
+                        return data_cli[i].model === selec_email;
+                    });
+                });
+                $('#remitente').empty();
+                $.each(arr_cli, function (i,v)
+                {
+                    $('#remitente').append($('<option></option>').val(arr_cli[i].pk).html(arr_cli[i].pk + ' - ' + arr_cli[i].fields.nombre));
+                });
+                $('#email_r').empty();
+                $.each(arr_email, function (i,v) {
+                    $('#email_r').append($('<option></option>').val(arr_email[i].fields.email).html(arr_email[i].fields.email));
+                });
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert(textStatus+' : '+errorThrown);
+        }).always(function(data) {
+            //alert( "complete" );
+        });
+    }
+});
+$('#btn_s_destinatario').on('click', function(event){
+    event.preventDefault();
+    if($("#s_destinatario").val().length == 0){
+        alert('ALERTA!!! El ID del Destinatario no puede estar en Blanco');
+    }else{
+        var arr = {"query_c": $("#persona_destinatario").val(), "query_d": $("#s_destinatario").val()};
+        var valParam = JSON.stringify(arr);
+        $.ajax({
+            url: '{% url 'c_Guia' %}',
+            type: 'POST',
+            data: { ArrJson: valParam },
+            DataType: 'json',
+        }).done(function(data) {
+            if(data.length == 0){
+                alert('ALERTA!!! No se encuentra el Destinatario');
+                return;
+            }
+            else{
+                data_cli = $.parseJSON(data);
+                var arr_cli;
+                var selec_cli = "barcode.cliente";
+                var arr_email;
+                var selec_email = "barcode.email";
+                $.each(data_cli, function (i,v)
+                {
+                    arr_cli = $(data_cli).filter(function( i ) {
+                        return data_cli[i].model === selec_cli;
+                    });
+                    arr_email = $(data_cli).filter(function( i ) {
+                        return data_cli[i].model === selec_email;
+                    });
+                });
+                $('#destinatario').empty();
+                $.each(arr_cli, function (i,v)
+                {
+                    $('#destinatario').append($('<option></option>').val(arr_cli[i].pk).html(arr_cli[i].pk + ' - ' + arr_cli[i].fields.nombre));
+                });
+                $('#email_d').empty();
+                $.each(arr_email, function (i,v) {
+                    $('#email_d').append($('<option></option>').val(arr_email[i].fields.email).html(arr_email[i].fields.email));
+                });
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert(textStatus+' : '+errorThrown);
+        }).always(function(data) {
+            //alert( "complete" );
+        });
+    }
+});
+$("#id_guia").keypress(function (e) {
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $("#errmsg").html('<div class="alert alert-danger" role="alert"><strong>Ingrese solo números</strong></div>').show().fadeOut("slow");
+        return false;
+    }
+});
+$("#id_recolecta").keypress(function (e) {
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $("#errmsg").html('<div class="alert alert-danger" role="alert"><strong>Ingrese solo números</strong></div>').show().fadeOut("slow");
+        return false;
+    }
+});
+$("#id_cantidad").keypress(function (e) {
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $("#errmsg").html('<div class="alert alert-danger" role="alert"><strong>Ingrese solo números</strong></div>').show().fadeOut("slow");
+        return false;
+    }
+});
+$("#s_remitente").keypress(function (e) {
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $("#errmsg").html('<div class="alert alert-danger" role="alert"><strong>Ingrese solo números</strong></div>').show().fadeOut("slow");
+        return false;
+    }
+});
+$("#s_destinatario").keypress(function (e) {
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $("#errmsg").html('<div class="alert alert-danger" role="alert"><strong>Ingrese solo números</strong></div>').show().fadeOut("slow");
+        return false;
+    }
+});
+
+$('#btn_submit').on('click', function(event){
+    event.preventDefault();
+    if($("#destinatario").val().length == 0){
+        alert('ALERTA!!! El Destinatario no puede estar en Blanco');
+    }else if($("#remitente").val().length == 0){
+        alert('ALERTA!!! El Remitente no puede estar en Blanco');
+    }else{
+        var arr = {
+            "action": "add",
+            "guia": $("#id_guia").val(),
+            "recolecta": $("#id_recolecta").val(),
+            "cantidad": $("#id_cantidad").val(),
+            "origen": $("#id_origen").val(),
+            "ruta": $("#id_ruta").val(),
+            "remitente": $("#remitente").val(),
+            "email_r": $("#email_r").val(),
+            "destinatario": $("#destinatario").val(),
+            "email_d": $("#email_d").val(),
+            "destino": $("#id_destino").val() 
+        };
+        var valParam = JSON.stringify(arr);
+        $.ajax({
+            url: '{% url 'c_Guia' %}',
+            type: 'POST',
+            data: arr,
+            DataType: 'json',
+        }).done(function(data) {
+            if(data['errors']){
+                alert( "Revise los ERRORES: "+JSON.stringify(data));
+            } else {
+                location.href = data.url;
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert(textStatus+' : '+errorThrown);
+        }).always(function(data) {
+            //alert( "complete" );
+        });
+    }
+});
+});
+</script>
+{% endblock %}
+{% block page-title %} - Módulo : {{ module_title }}{% endblock %}
+{% block mod-guia %}<li class="active"><a href="{% url 'l_Guia' %}">Guía</a></li>{% endblock %}
+{% block content %}
+{% block content-title %}<h3>{{ section_title }}</h3>{% endblock %}
+<div class="col-sm-6">
+<span id="errmsg"></span>
+<form action="{% url 'c_Guia' %}" method="post" enctype="multipart/form-data" id="myform">
+{% csrf_token %}
+<div class="form-group">
+    <label for="{{ form.guia.id_for_label }}" class="txt_negrita">{{ form.guia.label }}</label><br>
+    {{ form.guia }}
+    {% if form.guia.help_text %}
+        <span class="help-block">{{ form.guia.help_text|safe }}</span>
+    {% endif %}
+</div>
+<div class="form-group">
+    <label for="{{ form.recolecta.id_for_label }}" class="txt_negrita">{{ form.recolecta.label }}</label><br>
+    {{ form.recolecta }}
+    {% if form.recolecta.help_text %}
+        <span class="help-block">{{ form.recolecta.help_text|safe }}</span>
+    {% endif %}
+</div>
+<div class="form-group">
+    <label for="{{ form.cantidad.id_for_label }}" class="txt_negrita">{{ form.cantidad.label }}</label><br>
+    {{ form.cantidad }}
+    {% if form.cantidad.help_text %}
+        <span class="help-block">{{ form.cantidad.help_text|safe }}</span>
+    {% endif %}
+</div>
+<div class="form-group">
+    <label for="{{ form.origen.id_for_label }}" class="txt_negrita">{{ form.origen.label }}</label><br>
+    {{ form.origen }}
+    {% if form.origen.help_text %}
+        <span class="help-block">{{ form.origen.help_text|safe }}</span>
+    {% endif %}
+</div>
+<div class="form-group">
+    <label for="{{ form.ruta.id_for_label }}" class="txt_negrita">{{ form.ruta.label }}</label><br>
+    {{ form.ruta }}
+    {% if form.ruta.help_text %}
+        <span class="help-block">{{ form.ruta.help_text|safe }}</span>
+    {% endif %}
+</div>
+<div class="form-group">
+    <label for="{{ form.destino.id_for_label }}" class="txt_negrita">{{ form.destino.label }}</label><br>
+    {{ form.destino }}
+    {% if form.destino.help_text %}
+    <span class="help-block">{{ form.destino.help_text|safe }}</span>
+    {% endif %}
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ form.remitente.label }}</h3>
+    </div>
+    <div class="panel-body">
+        <label for="tipo_remitente" class="txt_negrita">Tipo Persona : </label>
+        <select name="persona_remitente" id="persona_remitente">
+            <option value="" selected>---------</option>  
+            <option value="V"> V - Natural </option>
+            <option value="J"> J - Jurídica </option>
+        </select>
+        <input name="s_remitente" id="s_remitente" type="text" size="20" placeholder="ID del Remitente"> 
+        <button class="btn btn-sm btn-default" title="Buscar - Filtrar" id="btn_s_remitente"><img src="{% static 'css/icon/StartMenuSearchicon16.png' %}" alt=""></button>
+        <br>
+        <label for="{{ form.remitente.id_for_label }}" class="txt_negrita">{{ form.remitente.label }}</label><br>
+        {{ form.remitente }}
+        {% if form.remitente.help_text %}
+            <span class="help-block">{{ form.remitente.help_text|safe }}</span>
+        {% endif %}
+        <br>
+        {{ form.email_r }}
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ form.destinatario.label }}</h3>
+    </div>
+    <div class="panel-body">
+        <label for="tipo_destinatario" class="txt_negrita">Tipo Persona : </label>
+        <select name="persona_destinatario" id="persona_destinatario">
+            <option value="" selected>---------</option>  
+            <option value="V"> V - Natural </option>
+            <option value="J"> J - Jurídica </option>
+        </select>
+        <input name="s_destinatario" id="s_destinatario" type="text" size="20" placeholder="ID del Destinatario"> 
+        <button class="btn btn-sm btn-default" title="Buscar - Filtrar" id="btn_s_destinatario"><img src="{% static 'css/icon/StartMenuSearchicon16.png' %}" alt=""></button>
+        <br>
+        <label for="{{ form.destinatario.id_for_label }}" class="txt_negrita">{{ form.destinatario.label }}</label><br>
+        {{ form.destinatario }}
+        {% if form.destinatario.help_text %}
+            <span class="help-block">{{ form.destinatario.help_text|safe }}</span>
+        {% endif %}
+        <br>
+        {{ form.email_d }}
+    </div>
+</div>
+<button type="submit" class="btn btn-default" id="btn_submit" title="Guardar" form="myform"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+<a type="button" class="btn btn-default" href="{% url 'l_Cliente' %}" title="Salir"><span class="glyphicon glyphicon-remove"></span></a>
+</form>
+</div>
+{% endblock %}
