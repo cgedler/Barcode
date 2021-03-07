@@ -1,0 +1,22 @@
+{% load static %}
+<div class="modal-dialog">
+<!-- Modal content-->
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Detalle</h4>
+</div>
+<div class="modal-body">
+<label for="id_ruta"><strong>Código del Ruta : </strong></label>
+{{object.id_ruta}}
+<p></p>
+<label for="nombre"><strong>Nombre : </strong></label>
+{{object.nombre}} 
+<p></p>
+</div>
+<div class="modal-footer">
+<a class="btn btn-sm btn-default" href="{% url 'pu_Ruta' object.id_ruta %}" title="Imprimir PDF"><img src="{% static 'css/icon/AdobePDFDocumenticon16.png' %}" alt=""></a>
+<button type="button" class="btn btn-default" data-dismiss="modal" title="Salir"><span class="glyphicon glyphicon-remove"></span></button>
+</div>
+</div>
+</div>

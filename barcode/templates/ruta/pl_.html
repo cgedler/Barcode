@@ -1,0 +1,40 @@
+{% extends 'basepdf.html' %}
+{% block extra-style %}
+<style>
+#tablas {
+border-collapse: collapse;
+width: 100%;
+}
+#tablas td, #tablas th {
+border: 1px solid rgb(0, 0, 0);
+padding: 5px;
+}
+#tablas th {
+text-align: center;
+background-color: rgb(119, 117, 131);
+color: white;
+}
+</style>
+{% endblock %} 
+{% block page-title %} Módulo : {{ module_title }}{% endblock %}
+{% block content-title %}<h1>Reporte - {{ section_title }}</h1>{% endblock %}
+{% block content %}
+<table id="tablas" repeat="1">
+<thead>
+<tr>
+    <th> CÓDIGO </th>
+    <th> NOMBRE </th>
+</tr>
+</thead>
+<tbody>
+{% for Ruta in context_pdf %}
+<tr>
+    <td>{{ Ruta.id_ruta }}</td>
+    <td>{{ Ruta.nombre }}</td>
+</tr>
+{% endfor %}
+</td>
+</tr>
+</tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'basepdf.html' %}
+{% block page-title %} Módulo : {{ module_title }}{% endblock %}
+{% block content-title %}<h1>Reporte - {{ section_title }}</h1>{% endblock %}
+{% block content %}
+{% for Ruta in context_pdf %}
+<p><label for="id_ruta" class="txt_negrita">Código del Ruta : </label> {{ Ruta.id_ruta }}</p><br>
+<p><label for="nombre" class="txt_negrita">Nombre : </label> {{ Ruta.nombre }}</p><br>
+{% endfor %}
+{% endblock %}
