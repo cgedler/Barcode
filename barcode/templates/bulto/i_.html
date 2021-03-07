@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page-title %} - Módulo : Reporte{% endblock %}
+{% block extra-js %}
+<script src="{% static 'js/Chart.min.js' %}"></script>
+<script type="text/javascript">
+var config1 = {
+    type: 'bar',
+    data: {
+        datasets: [{
+            data: {{ data1|safe }},
+            //fill: false,
+            backgroundColor: ['#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf', '#ffcd56', '#aaff80','#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40'],
+            borderWidth: 1,
+            label: 'Bultos por cargar'
+        }],
+        labels: {{ labels1|safe }}
+    },
+    //options: { responsive: true}
+    options:{scales:{xAxes:[{ticks:{beginAtZero:true}}]}}
+};
+var config2 = {
+    type: 'bar',
+    data: {
+        datasets: [{
+            data: {{ data2|safe }},
+            //fill: false,
+            backgroundColor: ['#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf', '#ffcd56', '#aaff80','#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40'],
+            borderWidth: 1,
+            label: 'Bultos ya cargados'
+        }],
+        labels: {{ labels2|safe }}
+    },
+    //options: { responsive: true}
+    options:{scales:{xAxes:[{ticks:{beginAtZero:true}}]}}
+};
+var config3 = {
+    type: 'bar',
+    data: {
+        datasets: [{
+            data: {{ data3|safe }},
+            //fill: false,
+            backgroundColor: ['#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf', '#ffcd56', '#aaff80','#bf1e2e', '#fba729', '#ff6384', '#cc9966', '#ff9f40'],
+            borderWidth: 1,
+            label: 'Bultos descargados en Destino'
+        }],
+        labels: {{ labels3|safe }}
+    },
+    //options: { responsive: true}
+    options:{scales:{xAxes:[{ticks:{beginAtZero:true}}]}}
+};
+window.onload = function() {
+    var ctx1 = document.getElementById('lineChart1').getContext('2d');
+    window.myPie1 = new Chart(ctx1, config1);
+    var ctx2 = document.getElementById('lineChart2').getContext('2d');
+    window.myPie2 = new Chart(ctx2, config2);
+    var ctx3 = document.getElementById('lineChart3').getContext('2d');
+    window.myPie3 = new Chart(ctx3, config3);
+};
+</script>
+{% endblock %}
+{% block mod-loaded %}<li class="active"><a href="{% url 'cargados' %}">Reporte Bultos</a></li>{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-xs-6 col-md-6">
+        <canvas id="lineChart1"></canvas>
+    </div>
+    <div class="col-xs-6 col-md-6">
+        <canvas id="lineChart2"></canvas>
+    </div>
+</div>
+<div class="row">
+<div class="col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Reporte - Bultos por cargar en camión</h3>
+        </div>
+        <div class="panel-body">
+            <form action="{% url 'pl_xCargar' %}" method="get" name="form1">
+                <div class="input-group">
+                <label for="sucursal1">Sucursal :</label>
+                <br>
+                <select name="origen1" id="origen1">
+                <option value="" selected>---------</option>  
+                {% for Origen in origen_list %}
+                     <option value="{{ Origen.id_origen }}">{{ Origen.nombre }}</option>
+                {% endfor %}
+                </select>
+                <br>
+                <label for="ruta1">Ruta :</label>
+                <br>
+                <select name="ruta1" id="ruta1">
+                    <option value="" selected>---------</option>  
+                    {% for Ruta in ruta_list %}
+                         <option value="{{ Ruta.id_ruta }}">{{ Ruta.nombre }}</option>
+                    {% endfor %}
+                    </select>
+                <button type="submit" class="btn btn-sm btn-default" title="Buscar - Filtrar"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Reporte - Bultos ya cargados por Ruta</h3>
+        </div>
+        <div class="panel-body">
+            <form action="{% url 'pl_xCargados' %}" method="get" name="form2">
+                <div class="input-group">
+                <label for="sucursal2">Sucursal :</label>
+                <br>
+                <select name="origen2" id="origen2">
+                <option value="" selected>---------</option>  
+                {% for Origen in origen_list %}
+                     <option value="{{ Origen.id_origen }}">{{ Origen.nombre }}</option>
+                {% endfor %}
+                </select>
+                <br>
+                <label for="ruta2">Ruta :</label>
+                <br>
+                <select name="ruta2" id="ruta2">
+                    <option value="" selected>---------</option>  
+                    {% for Ruta in ruta_list %}
+                         <option value="{{ Ruta.id_ruta }}">{{ Ruta.nombre }}</option>
+                    {% endfor %}
+                    </select>
+                <button type="submit" class="btn btn-sm btn-default" title="Buscar - Filtrar"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<div class="row">
+    <div class="col-sm-6"></div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Reporte - Bultos ya cargados por Camión</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{% url 'pl_xCamion' %}" method="get" name="form3">
+                    <div class="input-group">
+                    <label for="sucursal2">Sucursal :</label>
+                    <br>
+                    <select name="origen3" id="origen3">
+                    <option value="" selected>---------</option>  
+                    {% for Origen in origen_list %}
+                         <option value="{{ Origen.id_origen }}">{{ Origen.nombre }}</option>
+                    {% endfor %}
+                    </select>
+                    <br>
+                    <label for="camion">Camión :</label>
+                    <br>
+                    <select name="camion" id="camion">
+                        <option value="" selected>---------</option>  
+                        {% for Camion in camion_list %}
+                             <option value="{{ Camion.id_camion }}">{{ Camion.nombre }}</option>
+                        {% endfor %}
+                        </select>
+                    <button type="submit" class="btn btn-sm btn-default" title="Buscar - Filtrar"><span class="glyphicon glyphicon-search"></span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6 col-md-6">
+        <canvas id="lineChart3"></canvas>
+    </div>
+    <div class="col-xs-6 col-md-6">
+    </div>
+</div>
+{% endblock %}

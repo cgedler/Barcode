@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block page-title %} - Módulo : Entrega{% endblock %}
+{% block extra-js %}
+<script>
+$.fn.delayPasteKeyUp = function(fn, ms)
+ {
+	 var timer = 0;
+	 $(this).on("propertychange input", function()
+	 {
+		 clearTimeout(timer);
+		 timer = setTimeout(fn, ms);
+	 });
+ };
+ $(document).ready(function()
+ {
+ 	$("#ingreso").delayPasteKeyUp(function(){
+        $("#form1").submit();
+	$("#ingreso").val("");
+ }, 200);
+ });
+</script>
+{% endblock %}
+{% block mod-delivery %}<li class="active"><a href="{% url 'entregar' %}">Entrega Destinatario</a></li>{% endblock %}
+{% block content %}
+<p></p>
+<br>
+{% if messages %}
+<ul>
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+<strong>{{ message }}</strong>
+</div>
+{% endfor %}
+</ul>
+{% endif %}
+<p></p>
+<br>
+<div class="col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Entrega de Bultos / Paquetes</h3>
+        </div>
+        <div class="panel-body">
+            <form action="{% url 'e_Bulto' %}" method="get" name="form1" id="form1">
+                <div class="input-group">
+                <label for="guia">Lectura de código :</label>
+                <br>
+                <input name="q" type="text" id="ingreso" placeholder="Por favor! inserte aquí...">
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'basepdf2.html' %}
+{% block extra-style %}
+<style>
+#tablas {
+border-collapse: collapse;
+width: 70%;
+}
+#tablas td, #tablas th {
+border: 1px solid rgb(0, 0, 0);
+padding: 2px; 
+}
+#tablas th {
+text-align: center;
+}
+#tablas td {
+text-align: center;
+}
+</style>
+{% endblock %} 
+{% block page-title %} Módulo : {{ module_title }}{% endblock %}
+{% block content-title %}<h1>{{ section_title }}</h1>{% endblock %}
+{% block content %}
+<table repeat="1" id="tablas">
+<tr>
+    <th>GUÍA</th>
+    <th>BULTOS</th>
+    <th>CARGADOS</th>
+</tr>
+{% for key, value in guias.items %} 
+<tr>
+    <td>{{ key }}</td>
+    <td>{{ value|first }}</td> 
+    <td>                 </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
