@@ -1,0 +1,19 @@
+{
+    "empresa": [
+        {
+            "nombre": "Fletes G.A.G., C.A.",
+            "rif": "J-30082099-8",
+            "celular": "0212-632.55.33",
+            "telefono": "0212-632.28.98",
+            "email": "empresaprueba@gmail.com",
+            "direstado": "Dtto. Capital",
+            "dirciudad":"Caracas",
+            "dirmunicipio":"Libertador",
+            "dirparroquia":"San Pedro",
+            "direccion":"Urb. Las Acacias, Av. Nueva Granada",
+            "website": "www.fletesgag.com",
+            "postal": "1040",
+            "notas":"notas"
+        }
+    ]
+}
