@@ -1,0 +1,35 @@
+{% extends 'base.html' %}{% load static %}
+{% block page-title %}index{% endblock %}
+{% block extra-css %}<link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}">{% endblock %}
+{% block extra-js %}
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/modal.js' %}"></script>
+{% endblock %}
+{% block content %}
+<p></p>
+{% if object_list %}
+<table id="tabla" class="display compact" style="width:100%">
+<thead>
+    <tr>
+        <th>#G</th>
+        <th>#R</th>
+        <th>BULTO</th>
+        <th>UBICACIÓN</th>
+    </tr>
+</thead>
+<tbody>
+{% for Bulto in object_list %}
+    <tr>
+        <td>{{ Bulto.guias }}</td>
+        <td>{{ Bulto.recolecta }}</td>
+        <td>{{ Bulto.id_bulto }}</td>
+        <td>{{ Bulto.get_estado_display }}</td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+    <h4>No hay registros a mostrar</h4>
+{% endif %}
+<a class="btn btn-sm btn-default" href="{% url 'index' %}" title="Volver" >Volver</a>
+{% endblock %}
