@@ -1,0 +1,56 @@
+{% extends 'basepdf.html' %}
+{% block extra-style %}
+<style>
+#tablas {
+border-collapse: collapse;
+width: 100%;
+}
+#tablas td, #tablas th {
+border: 1px solid rgb(0, 0, 0);
+padding: 5px;
+}
+#tablas th {
+text-align: center;
+background-color: rgb(119, 117, 131);
+color: white;
+}
+</style>
+{% endblock %} 
+{% block page-title %} Módulo : {{ module_title }}{% endblock %}
+{% block content-title %}<h1>Reporte - {{ section_title }}</h1>{% endblock %}
+{% block content %}
+<table id="tablas" repeat="1">
+<thead>
+<tr>
+    <th> ID </th>
+    <th> GUÍA </th>
+    <th> RECOLECTA </th>
+    <th> BULTOS/PAQUETES </th>
+    <th> SUCURSAL </th>
+    <th> REMITENTE </th>
+    <th> RUTA </th>
+    <th> DESTINO </th>
+    <th> DESTINATARIO </th>
+    <th> ESTADO </th>
+</tr>
+</thead>
+<tbody>
+{% for Guia in context_pdf %}
+<tr>
+    <td>{{ Guia.id }}</td>
+    <td>{{ Guia.guia }}</td>
+    <td>{{ Guia.recolecta }}</td>
+    <td>{{ Guia.cantidad }}</td>
+    <td>{{ Guia.origen }}</td>
+    <td>{{ Guia.remitente }}</td>
+    <td>{{ Guia.ruta }}</td>
+    <td>{{ Guia.destino }}</td>
+    <td>{{ Guia.destinatario }}</td>
+    <td>{{ Guia.get_estado_display }}</td>
+</tr>
+{% endfor %}
+</td>
+</tr>
+</tbody>
+</table>
+{% endblock %}

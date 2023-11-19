@@ -1,0 +1,58 @@
+{% extends 'base.html' %}{% load static %}
+{% block page-title %} - Módulo : {{ module_title }}{% endblock %}
+{% block extra-css %}<link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}">{% endblock %}
+{% block extra-js %}
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/modal.js' %}"></script>
+{% endblock %}
+{% block mod-truck %}<li class="active"><a href="{% url 'l_Camion' %}">Camión</a></li>{% endblock %}
+{% block content %}
+{% block content-title %}<h3>{{ section_title }}</h3>{% endblock %}
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"></div>
+<p></p>
+{% if messages %}
+<ul>
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+<strong>{{ message }}</strong>
+</div>
+{% endfor %}
+</ul>
+{% endif %}
+<p></p>
+<button class="btn btn-sm btn-default" onclick="return abrir_modal('{% url 'c_Camion' %}')" title="Crear Nuevo"><img src="{% static 'css/icon/SignAddicon.png' %}" alt=""></button>
+<a class="btn btn-sm btn-default" href="{% url 'pl_Camion' %}" title="Imprimir Listado" ><img src="{% static 'css/icon/AdobePDFDocumenticon16.png' %}" alt=""></a>
+<p></p>
+{% if object_list %}
+<table id="tabla" class="display compact" style="width:100%">
+<thead>
+    <tr>
+        <th> CÓDIGO </th>
+        <th> NOMBRE </th>
+        <th class="text-center"> ACCIONES </th>
+    </tr>
+</thead>
+<tbody>
+{% for Camion in object_list %}
+    <tr>
+        <td>{{ Camion.id_camion }}</td>
+        <td>{{ Camion.nombre }}</td>
+        <td class="text-center">
+            <form method="POST" action="{% url 'e_Camion' Camion.id_camion %}">
+            {% csrf_token %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-success" onclick="return abrir_modal('{% url 'd_Camion' Camion.id_camion %}')" title="Detalle"><span class="glyphicon glyphicon-eye-open"></span></button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="return abrir_modal('{% url 'u_Camion' Camion.id_camion %}')" title="Actualizar"><span class="glyphicon glyphicon-pencil"></span></button>
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return eliminar();" title="Eliminar"><span class="glyphicon glyphicon-trash"></span></button>
+            </div>
+            </form>
+        </td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+    <h4>No hay registros a mostrar</h4>
+{% endif %}
+{% endblock %}

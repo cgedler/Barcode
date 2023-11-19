@@ -1,0 +1,29 @@
+{% load static %}
+<div class="modal-dialog">
+<!-- Modal content-->
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Actualizar</h4>
+</div>
+<div class="modal-body">
+    <form method="post" enctype="multipart/form-data" action="{% url 'u_Cliente' object.pk %}" id="myform">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+    {{ field.errors }}
+    <label for="{{ field.id_for_label }}" class="txt_negrita">{{ field.label }}</label><br>
+    {{ field }}
+    {% if field.help_text %}
+    <span class="help-block">{{ field.help_text|safe }}</span>
+    {% endif %}
+    </div>
+    {% endfor %}
+    </form>
+</div>
+<div class="modal-footer">
+<button type="submit" class="btn btn-default" title="Guardar" form="myform"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+<button type="button" class="btn btn-default" data-dismiss="modal" title="Salir"><span class="glyphicon glyphicon-remove"></span></button>
+</div>
+</div>
+</div>

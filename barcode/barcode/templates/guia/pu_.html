@@ -1,0 +1,16 @@
+{% extends 'basepdf.html' %}
+{% block page-title %} Módulo : {{ module_title }}{% endblock %}
+{% block content-title %}<h1>Reporte - {{ section_title }}</h1>{% endblock %}
+{% block content %}
+{% for Guia in context_pdf %}
+<p><label for="id_Guia" class="txt_negrita">Guía : </label>{{ Guia.guia }}</p><br>
+<p><label for="id_Guia"class="txt_negrita">Recolecta : </label>{{ Guia.recolecta }}</p><br>
+<p><label for="nombre"class="txt_negrita">Estado : </label>{{ Guia.estado }}</p><br>
+<p><label for="nombre"class="txt_negrita">Cantidad de Bultos/Paquetes : </label>{{ Guia.cantidad }}</p><br>
+<p><label for="nombre"class="txt_negrita">Remitente : </label>{{ Guia.remitente }}</p><br>
+<p><label for="nombre"class="txt_negrita">Destinatario : </label>{{ Guia.destinatario }}</p><br>
+<p><label for="nombre"class="txt_negrita">Ruta : </label>{{ Guia.ruta }}</p><br>
+<p><label for="nombre"class="txt_negrita">Sucursal : </label>{{ Guia.origen }}</p><br>
+<p><label for="nombre"class="txt_negrita">Destino : </label>{{ Guia.destino }}</p><br> 
+{% endfor %}
+{% endblock %}

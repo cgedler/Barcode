@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block page-title %}index{% endblock %}
+{% block extra-css %}<style>#errmsg { color: red; }</style>{% endblock %}
+{% block extra-js %}
+<script type="application/javascript">
+function notempty() {
+    var empt = document.forms["form1"]["q"].value;
+    if (empt == "") {
+        alert("Por favor el campo no puede estar vacio!");
+        return false;
+    }
+    else {
+        return true; 
+    }
+}
+$(document).ready(function () {
+  $("#q").keypress(function (e) {
+     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $("#errmsg").html("Ingrese solo números").show().fadeOut("slow");
+               return false;
+    }
+   });
+});
+</script>
+{% endblock %}
+{% block content %}
+<p></p>
+<br>
+<div class="col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Consulta de sus Envios</h3>
+        </div>
+        <div class="panel-body">
+            <form action="{% url 's_Bulto' %}" method="get" name="form1">
+                {% csrf_token %}
+                <div class="input-group">
+                <label for="id_origen">Sucursal donde realizo su envío :</label>
+                <br>
+                <select name="origen" id="origen">
+                <option value="" selected>---------</option>  
+                {% for Origen in object_list %}
+                     <option value="{{ Origen.id_origen }}">{{ Origen.nombre }}</option>
+                {% endfor %}
+                </select>
+                <br>
+                <p></p>
+                <label for="guia">Número de Guía / Recolecta :</label>
+                <br>
+                <!-- <input name="q" type="text" size="50" placeholder="Por favor! inserte su Número de Guía aquí..."> -->
+                <input name="q" id="q" type="text" placeholder="Inserte su código aquí...">
+                <button type="submit" class="btn btn-sm btn-default" title="Buscar - Filtrar" onclick="return notempty();"><span class="glyphicon glyphicon-search"></span></button>
+                <br>
+                <span id="errmsg"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

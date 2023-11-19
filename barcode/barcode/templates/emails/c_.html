@@ -1,0 +1,143 @@
+{% extends 'base.html' %}{% load static %}
+{% block extra-js %}
+<script src="{% static 'js/jquery.cookie.js' %}"></script>
+<script type="application/javascript">
+$(document).ready(function () {
+$('#email_cliente').empty();
+// -- Ajax --
+var csrftoken = $.cookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+$('#btn_s_remitente').on('click', function(event){
+    event.preventDefault();
+    if($("#s_remitente").val().length == 0){
+        alert('ALERTA!!! El ID del Cliente no puede estar en Blanco');
+    }else{
+        var arr = {"query_a": $("#persona_remitente").val(), "query_b": $("#s_remitente").val()};
+        var valParam = JSON.stringify(arr);
+        $.ajax({
+            url: '{% url 'c_Email' %}',
+            type: 'POST',
+            data: { ArrJson: valParam },
+            DataType: 'json',
+        }).done(function(data) {
+            if(data.length == 0){
+                alert('ALERTA!!! No se encuentra el Cliente');
+                return;
+            }
+            else{
+                data_cli = $.parseJSON(data);
+                var arr_cli;
+                var selec_cli = "barcode.cliente";
+              
+                $.each(data_cli, function (i,v)
+                {
+                    arr_cli = $(data_cli).filter(function( i ) {
+                        return data_cli[i].model === selec_cli;
+                    });
+                });
+                $('#email_cliente').empty();
+                $.each(arr_cli, function (i,v)
+                {
+                    $('#email_cliente').append($('<option></option>').val(arr_cli[i].pk).html(arr_cli[i].pk + ' - ' + arr_cli[i].fields.nombre));
+                });
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert(textStatus+' : '+errorThrown);
+        }).always(function(data) {
+            //alert( "complete" );
+        });
+    }
+});
+$("#s_remitente").keypress(function (e) {
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        $("#errmsg").html('<div class="alert alert-danger" role="alert"><strong>Ingrese solo números</strong></div>').show().fadeOut("slow");
+        return false;
+    }
+});
+$('#btn_submit').on('click', function(event){
+    event.preventDefault();
+    if($("#email_cliente").val().length == 0){
+        alert('ALERTA!!! El Cliente no puede estar en Blanco');
+    }else{
+        var arr = {
+            "action": "add",
+            "email_cliente": $("#email_cliente").val(),
+            "email": $("#id_email").val(),
+        };
+        var valParam = JSON.stringify(arr);
+        $.ajax({
+            url: '{% url 'c_Email' %}',
+            type: 'POST',
+            data: arr,
+            DataType: 'json',
+        }).done(function(data) {
+            if(data['errors']){
+                alert( "Revise los ERRORES: "+JSON.stringify(data));
+            } else {
+                location.href = data.url;
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert(textStatus+' : '+errorThrown);
+        }).always(function(data) {
+            //alert( "complete" );
+        });
+    }
+});
+
+});
+</script>
+{% endblock %}
+{% block page-title %} - Módulo : {{ module_title }}{% endblock %}
+{% block mod-email %}<li class="active"><a href="{% url 'l_Email' %}">Emails-Clientes</a></li>{% endblock %}
+{% block content %}
+{% block content-title %}<h3>{{ section_title }}</h3>{% endblock %}
+<div class="col-sm-6">
+<form action="{% url 'c_Email' %}" method="post" enctype="multipart/form-data" id="myform">
+{% csrf_token %} 
+<div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ form.email_cliente.label }}</h3>
+    </div>
+    <div class="panel-body">
+        <label for="tipo_remitente" class="txt_negrita">Tipo Persona : </label>
+        <select name="persona_remitente" id="persona_remitente">
+            <option value="" selected>---------</option>  
+            <option value="V"> V - Natural </option>
+            <option value="J"> J - Jurídica </option>
+        </select>
+        <input name="s_remitente" id="s_remitente" type="text" size="20" placeholder="ID del Cliente"> 
+        <button class="btn btn-sm btn-default" title="Buscar - Filtrar" id="btn_s_remitente"><img src="{% static 'css/icon/StartMenuSearchicon16.png' %}" alt=""></button>
+        <br>
+        <label for="{{ form.email_cliente.id_for_label }}" class="txt_negrita">{{ form.email_cliente.label }}</label><br>
+        {{ form.email_cliente }}
+        {% if form.email_cliente.help_text %}
+            <span class="help-block">{{ form.email_cliente.help_text|safe }}</span>
+        {% endif %}
+        <br>
+        {{ form.email_r }}
+    </div>
+</div>
+<div class="form-group">
+    {{ email.errors }}
+    <label for="{{ form.email.id_for_label }}" class="txt_negrita">{{ form.email.label }}</label><br>
+    {{ form.email}}
+    {% if form.email.help_text %}
+    <span class="help-block">{{ form.email.help_text|safe }}</span>
+    {% endif %}
+</div>
+</form>
+<button type="submit" class="btn btn-default" id="btn_submit" title="Guardar" form="myform"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+<a type="button" class="btn btn-default" href="{% url 'l_Email' %}" title="Salir"><span class="glyphicon glyphicon-remove"></span></a>
+</form>
+</div>
+{% endblock %}

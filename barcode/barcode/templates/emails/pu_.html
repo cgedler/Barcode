@@ -1,0 +1,10 @@
+{% extends 'basepdf.html' %}
+{% block page-title %} Módulo : {{ module_title }}{% endblock %}
+{% block content-title %}<h1>Reporte - {{ section_title }}</h1>{% endblock %}
+{% block content %}
+{% for Email in context_pdf %}
+<p><label for="id_email" class="txt_negrita">Código del email : </label> {{ Email.id }}</p><br>
+<p><label for="nombre" class="txt_negrita">Nombre : </label> {{ Email.email_cliente }}</p><br>
+<p><label for="nombre" class="txt_negrita">Nombre : </label> {{ Email.email }}</p><br>
+{% endfor %}
+{% endblock %}

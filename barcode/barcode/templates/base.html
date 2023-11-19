@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+{% block extra-css %}{% endblock %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% block extra-js %}{% endblock %}
+<title>System Barcode {% block page-title %}{% endblock %}</title>
+<style>
+body { color: #818181; font: 400 12px Lato, sans-serif; }
+.row.content {height: auto; font-size: 12px;}
+.sidenav { background-color: #f1f1f1; height: 100%; letter-spacing: 2px;}
+/* On small screens, set height to 'auto' for the grid */
+@media screen and (max-width: 767px) { .row.content {height: auto;} .sidenav { background-color: #f1f1f1; height: 100%; letter-spacing: 2px; width: 100%;}
+.col-sm-9 {width: 100%;} }
+@media screen and (max-width: 1300px) { .sidenav {width:25%;} }
+@media screen and (max-width: 360px) { .row.content {height: auto;} .sidenav { background-color: #f1f1f1; height: 100%; letter-spacing: 2px; width: 100%;}
+.col-sm-9 {width: 100%;} }
+@media screen and (max-width: 375px) { .row.content {height: auto;} .sidenav { background-color: #f1f1f1; height: 100%; letter-spacing: 2px; width: 100%;}
+.col-sm-9 {width: 100%;} }
+@media screen and (max-width: 414px) { .row.content {height: auto;} .sidenav { background-color: #f1f1f1; height: 100%; letter-spacing: 2px; width: 100%;}
+.col-sm-9 {width: 100%;} }
+</style> 
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+        <ul class="nav nav-pills nav-stacked">
+            <li><img src="{% static 'Logo-Fletes-GAG-new.png' %}" alt=''></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}"> <span class="glyphicon glyphicon-user"></span> {{ user.username }} <span class="glyphicon glyphicon-log-out"></span> Salir</a></li>
+            <li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-search"></span> Consulta de Bultos</a></li>
+            {% block mod-home %}<li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-dashboard"></span> DashBoard</a></li>{% endblock %}
+            {% block mod-client %}<li><a href="{% url 'l_Cliente' %}"><img src="{% static 'css/icon/Appssystemusersicon24.png' %}" alt=""> Clientes</a></li>{% endblock %}
+            {% block mod-email %}<li><a href="{% url 'l_Email' %}"><span class="glyphicon glyphicon-envelope"></span> Emails-Clientes</a></li>{% endblock %}
+            {% block mod-guia %}<li><a href="{% url 'l_Guia' %}"><span class="glyphicon glyphicon-file"></span> Guía</a></li>{% endblock %}
+            {% block mod-load %}<li><a href="{% url 'cargar' %}"><span class="glyphicon glyphicon-upload"></span> Carga de Camión</a></li>{% endblock %}
+            {% block mod-download %}<li><a href="{% url 'descargar' %}"><span class="glyphicon glyphicon-download"></span> Descarga de Camión</a></li>{% endblock %}
+            {% block mod-delivery %}<li><a href="{% url 'entregar' %}"><span class="glyphicon glyphicon-arrow-right"></span> Entrega Destinatario</a></li>{% endblock %}
+            {% block mod-origin %}<li><a href="{% url 'l_Origen' %}"> <span class="glyphicon glyphicon-home"></span> Sucursales (Origen)</a></li>{% endblock %}
+            {% block mod-destination %}<li><a href="{% url 'l_Destino' %}"><span class="glyphicon glyphicon-globe"></span> Destinos</a></li>{% endblock %}
+            {% block mod-way %}<li><a href="{% url 'l_Ruta' %}"><span class="glyphicon glyphicon-road"></span> Ruta</a></li>{% endblock %}
+            {% block mod-truck %}<li><a href="{% url 'l_Camion' %}"><img src="{% static 'css/icon/TransportTruckicon24.png' %}" alt=""> Camion</a></li>{% endblock %}
+            {% block mod-loaded %}<li><a href="{% url 'cargados' %}"><span class="glyphicon glyphicon-list-alt"></span> Reporte Bultos Cargados</a></li>{% endblock %}
+        {% else %}
+            <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> login</a></li>
+        {% endif %}
+        </ul>
+    </div>
+    <div class="col-sm-9">
+        {% block content %}
+        {% block content-title %}{% endblock %}
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>

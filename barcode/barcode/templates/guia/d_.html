@@ -1,0 +1,44 @@
+{% load static %}
+<div class="modal-dialog">
+<!-- Modal content-->
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title">Detalle</h4>
+</div>
+<div class="modal-body">
+<label for="guia"><strong>Guía : </strong></label>
+{{ object.guia }}
+<p></p>
+<label for="id_Guia"><strong>Recolecta : </strong></label>
+{{ object.recolecta }}
+<p></p>
+<label for="nombre"><strong>Estado : </strong></label>
+{{ object.estado }} 
+<p></p>
+<label for="nombre"><strong>Cantidad de Bultos/Paquetes : </strong></label>
+{{ object.cantidad }} 
+<p></p>
+<label for="nombre"><strong>Remitente : </strong></label>
+{{ object.remitente }} 
+<p></p>
+<label for="nombre"><strong>Destinatario : </strong></label>
+{{ object.destinatario }} 
+<p></p>
+<label for="nombre"><strong>Ruta : </strong></label>
+{{ object.ruta }} 
+<p></p>
+<label for="nombre"><strong>Sucursal : </strong></label>
+{{ object.origen }} 
+<p></p>
+<label for="nombre"><strong>Destino : </strong></label>
+{{ object.destino }} 
+<p></p>
+</div>
+<div class="modal-footer">
+<a class="btn btn-sm btn-default" href="{% url 'pu_Guia' object.id %}" title="Imprimir PDF"><img src="{% static 'css/icon/AdobePDFDocumenticon16.png' %}" alt=""></a>
+<a class="btn btn-sm btn-default" href="{% url 'ex_Guia' object.id %}" title="Imprimir Etiquetas"><img src="{% static 'css/icon/Barcodeicon16.png' %}" alt=""></a>
+<button type="button" class="btn btn-default" data-dismiss="modal" title="Salir"><span class="glyphicon glyphicon-remove"></span></button>
+</div>
+</div>
+</div>

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}{% load static %}
+{% block extra-css %}<style>#errmsg { color: red; }</style>{% endblock %}
+{% block extra-js %}
+<script type="application/javascript">
+$(document).ready(function () {
+    $("#id_id_cliente").keypress(function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            $("#errmsg").html('<div class="alert alert-danger" role="alert"><strong>Ingrese solo números</strong></div>').show().fadeOut("slow");
+            return false;
+        }
+    });
+});
+</script>
+{% endblock %}
+{% block page-title %} - Módulo : {{ module_title }}{% endblock %}
+{% block mod-client %}<li class="active"><a href="{% url 'l_Cliente' %}">Cliente</a></li>{% endblock %}
+{% block content %}
+{% block content-title %}<h3>{{ section_title }}</h3>{% endblock %}
+<div class="col-sm-6">
+<span id="errmsg"></span>
+<form action="{% url 'c_Cliente' %}" method="post" enctype="multipart/form-data" id="myform">
+{% csrf_token %} 
+{% for field in form %}
+<div class="form-group">
+{{ field.errors }}
+<label for="{{ field.id_for_label }}" class="txt_negrita">{{ field.label }}</label><br>
+{{ field }}
+{% if field.help_text %}
+<span class="help-block">{{ field.help_text|safe }}</span>
+{% endif %}
+</div>
+{% endfor %}
+</form>
+<button type="submit" class="btn btn-default" title="Guardar" form="myform"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+<a type="button" href="{% url 'l_Cliente' %}" class="btn btn-default" title="Salir"><span class="glyphicon glyphicon-remove"></span></a>
+</div>
+{% endblock %}
