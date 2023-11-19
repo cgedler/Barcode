@@ -1,0 +1,19 @@
+{
+    "empresa": [
+        {
+            "nombre": "Company, C.A.",
+            "rif": "J-12345678-9",
+            "celular": "0123-456.78.90",
+            "telefono": "0123-456.78.90",
+            "email": "company-example@gmail.com",
+            "direstado": "Dtto. Capital",
+            "dirciudad":"Caracas",
+            "dirmunicipio":"Libertador",
+            "dirparroquia":"San Pedro",
+            "direccion":"Urb. Las Acacias, Av. Nueva Granada",
+            "website": "www.comapny.com",
+            "postal": "1040",
+            "notas":"notas"
+        }
+    ]
+}
